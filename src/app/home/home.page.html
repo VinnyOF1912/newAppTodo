@@ -8,25 +8,35 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    <ion-item>
-      <ion-label>Atividade 1</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Atividade 2</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Atividade 3</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Atividade 4</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>Atividade 5</ion-label>
-    </ion-item>
-  </ion-list>
+    <ion-item-sliding>
+      <ion-item>
+        <ion-label>Estudar Ionic</ion-label>
+        <ion-icon slot="start" name="radio-button-off-outline"></ion-icon>
+      </ion-item>
+      <ion-item-options slide="start">
+      </ion-item-option (click)="unread(item)">Pendente</ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item-sliding>
+      <ion-item>
+        <ion-label>Fazer atividade 27/04</ion-label>
+        <ion-icon slot="start" name="radio-button-off-outline"></ion-icon>
+      </ion-item>
+      <ion-item-options slide="start">
+      </ion-item-option (click)="unread(item)">Pendente</ion-item-options>
+    </ion-item-sliding>
+    </ion-list>
+
   <ion-fab vertical="center" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab vertical="center" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="showAdd()" color="secundary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+      
   </ion-fab>
 </ion-content>
