@@ -13,7 +13,7 @@ export class HomePage {
   async showAdd() {
     const alert = await this.alertCrtl.create({
       cssClass: 'my-custom-class',
-      header: 'O que você deseja fazer?1',
+      header: 'O que você deseja fazer?',
       inputs: [
         {
           name: 'tarefa1',
