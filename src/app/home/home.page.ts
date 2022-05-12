@@ -9,6 +9,7 @@ import { AlertController, ToastController } from '@ionic/angular';
   export class HomePage {
 
   tarefas: any[] = [];
+  todoService: any;
 
   constructor(private alertCrtl: AlertController, private toastCtrl: ToastController) {}
 
@@ -55,8 +56,15 @@ import { AlertController, ToastController } from '@ionic/angular';
       return;
 
       }
-      const tarefa = { nome:novaTarefa, realizada: false};
+      const tarefa = { nome:novaTarefa, realizada: 0};
       this.tarefas.push(tarefa);
+      this.todoService.adicionaTarefa(tarefa.nome, tarefa.realizada )
+      .then((resposta)=>{
+        console.log(resposta);
+      })
+      .catch((erro)=>{
+        console.error(erro);
+      });
     }
   }
 
