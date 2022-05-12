@@ -1,17 +1,24 @@
 import { Component } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-  export class HomePage {
+export class HomePage {
 
-  tarefas: any[] = [];
+  tarefas: any [] = [];
   todoService: any;
 
-  constructor(private alertCrtl: AlertController, private toastCtrl: ToastController) {}
+  constructor(private alertCrtl: AlertController, private toastCtrl: ToastController, private actionSheetCrtl: ActionSheetController) {
+
+    let tarefaSalva = localStorage.getItem('tarefaUsuario');
+
+    if (tarefaSalva != null) {
+      this.tarefas = JSON.parse(tarefaSalva);
+    }
+  }
 
   async showAdd() {
     const alert = await this.alertCrtl.create({
@@ -27,47 +34,82 @@ import { AlertController, ToastController } from '@ionic/angular';
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
+          role:'Cancel',
+          cssClass:'secondary',
           handler: () => {
-            console.log('Cancelado com sucesso');
+            console.log('Cancelado com sucesso!');
           },
         },
-        {
-          text: 'Adicionar',
-          handler: (from) => {
-            this.adicionaTarefa(from.tarefa1);
-          },
+      {
+        text: 'Adicionar',
+        handler: (form) => {
+         this.adicionaTarefa(form.tarefa1);
         },
-      ],
-
-    })
+      },
+    ],
+    });
     await alert.present();
   }
+
   async adicionaTarefa(novaTarefa: string) {
-    if (novaTarefa.trim().length < 1) {
+    if (novaTarefa.trim().length <1 ){
       const toast = await this.toastCtrl.create({
         message: 'Por favor, digite a tarefa!',
-        duration: 2000,
+        duration:2000,
         position: 'top',
-      })
-
-      toast.present();
-      return;
-
-      }
-      const tarefa = { nome:novaTarefa, realizada: 0};
-      this.tarefas.push(tarefa);
-      this.todoService.adicionaTarefa(tarefa.nome, tarefa.realizada )
-      .then((resposta)=>{
-        console.log(resposta);
-      })
-      .catch((erro)=>{
-        console.error(erro);
       });
+      toast.present(); return;
     }
+    
+    const tarefa = {nome:novaTarefa, realizada: 0};
+    this.tarefas.push(tarefa); 
+
+    this.todoService.adicionarTarefa(tarefa.nome, tarefa.realizada)
+    .then((resposta)=>{
+      console.log(resposta);
+    })
+    .catch((erro)=>{
+      console.error(erro);
+    })
+
+    //this.salvarLocalStorage();
   }
 
+  salvarLocalStorage(){
+    localStorage.setItem('tarefaUsuario', JSON.stringify(this.tarefas));
+  }
+
+
+  async realizaAcoes(tarefa:any) {
+    const actionSheet = await this.actionSheetCrtl.create({
+      header: 'Qual ação realizar?',
+      buttons: [{
+        text: tarefa.realizada ? 'Desmarcar' : 'Marcar',
+        icon: tarefa.realizada ? 'checkmark-circle' : 'radio-button-off-outline',
+        handler: () => {
+          tarefa.realizada = !tarefa.realizada;
+          this.salvarLocalStorage();
+        }
+      }, {
+        text: 'Cancelar',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+
+    await actionSheet.present();
+    const {role, data} = await actionSheet.onDidDismiss();
+  }
+  
+  excluirTarefa(tarefa: any){
+    this.tarefas = this.tarefas.filter(arrayTarefa => tarefa != arrayTarefa);
+    this.salvarLocalStorage();
+  }
+  
+}
   
 
   
