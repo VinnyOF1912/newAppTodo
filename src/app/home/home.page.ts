@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { async } from '@angular/core/testing';
 import { ActionSheetController, AlertController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -12,12 +13,28 @@ export class HomePage {
   todoService: any;
 
   constructor(private alertCrtl: AlertController, private toastCtrl: ToastController, private actionSheetCrtl: ActionSheetController) {
+    this.carregaTarefa();
 
     let tarefaSalva = localStorage.getItem('tarefaUsuario');
 
     if (tarefaSalva != null) {
       this.tarefas = JSON.parse(tarefaSalva);
     }
+  }
+
+  carregaTarefa(){
+    this.todoService.listaTarefa()
+    .then( async(resposta: any[])=>{
+      console.table(resposta);
+      this.tarefas = resposta;
+    })
+    .catch(async(erro)=>{
+      const toast = await this.toastCtrl.create({
+        message: 'Erro ao realizar operação!',
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();    })
   }
 
   async showAdd() {

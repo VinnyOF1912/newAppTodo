@@ -21,4 +21,10 @@ export class TodoService {
 
     return this.http.get(url).toPromise();
   }
+
+  excluiTarefa(id: any){
+    const url = 'http://localhost/ApiTodo/api.php?id='+id;
+
+    return this.http.get(url).toPromise();
+  }
 }
