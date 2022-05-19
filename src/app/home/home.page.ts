@@ -134,10 +134,7 @@ export class HomePage {
     const {role, data} = await actionSheet.onDidDismiss();
   }
   
-  excluirTarefa(tarefa: any){
-    this.tarefas = this.tarefas.filter(arrayTarefa => tarefa != arrayTarefa);
-    this.salvarLocalStorage();
-  }
+  
   
 }
   
