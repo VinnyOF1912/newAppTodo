@@ -79,15 +79,28 @@ export class HomePage {
     }
     
     const tarefa = {nome:novaTarefa, realizada: 0};
-    this.tarefas.push(tarefa); 
+    this.tarefas.push(tarefa);
+
 
     this.todoService.adicionarTarefa(tarefa.nome, tarefa.realizada)
-    .then((resposta)=>{
-      console.log(resposta);
+    .then( async(resposta)=>{
+      const toast = await this.toastCtrl.create({
+        message: 'Operação Realizada com Sucesso!',
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();
+
+      this.carregaTarefa();
+
     })
-    .catch((erro)=>{
-      console.error(erro);
-    })
+    .catch(async(erro)=>{
+      const toast = await this.toastCtrl.create({
+        message: 'Erro ao realizar operação!',
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();    });
 
     //this.salvarLocalStorage();
   }
