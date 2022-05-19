@@ -15,4 +15,10 @@ export class TodoService {
 
     return this.http.post(url,param).toPromise();
   }
+
+  listaTarefa(){
+    const url = 'http://localhost/ApiTodo/api.php';
+
+    return this.http.get(url).toPromise();
+  }
 }
